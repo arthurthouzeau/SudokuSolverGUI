@@ -16,72 +16,53 @@ public class RandomGenerator extends SudokuBoard {
     /**
      * Initializes a new random SudokuBoard with a unique solution.
      */
+    @SuppressWarnings("unchecked")
     public RandomGenerator() {
         super(SIZE);
+        
+        LinkedList<Integer>[] available = new LinkedList[size * size];
+        int cell = 0;
+        int[] cellCoord = new int[2];
+        int num;
 
-        LinkedList<Integer> cells = new LinkedList<Integer>();
-        LinkedList<Integer> cellsNotSolution = new LinkedList<Integer>();
-        LinkedList<Integer> trialList = new LinkedList<Integer>();
-        int currentCellRank;
-        int[] currentCellCoord = new int[2];
-        int currentTrialValue;
-        int currentTrialIndex;
-
+        // Initialization of the "available" array used to keep
+        // track of what numbers we can still use in each cell
+        for (int i = 0; i < available.length; i++) {
+            available[i] = new LinkedList<Integer>();
+            for (int j = 1; j < size + 1; j++) {
+                available[i].add(j);
+            }
+        }
+        
         /*
          * Part I - Generate a complete random grid respecting Sudoku rules
          */
-        // In order to reduce computation difficulty for the Backtracking
-        // method we first randomly fill the first row
-        for (int i = 1; i < size + 1; i++)
-            trialList.add(i);
-        Collections.shuffle(trialList);
-        for (int j = 0; j < size; j++)
-            this.set(trialList.remove(), 0, j);
-
-        // Then randomly go through each of the empty cells
-        for (int i = 1; i < size + 1; i++)
-            trialList.add(i);
-        for (int i = size; i < size * size; i++)
-            cells.add(i);
-        Collections.shuffle(cells);
-        while (!cells.isEmpty()) {
-            currentCellRank = cells.remove();
-            currentCellCoord[0] = currentCellRank / size;
-            currentCellCoord[1] = currentCellRank % size;
-
-            // For each one, randomly find a valid number to go into it
-            Collections.shuffle(trialList);
-            currentTrialIndex = 0;
-            currentTrialValue = trialList.get(currentTrialIndex);
-            while (!this.isNumValid(currentCellCoord, currentTrialValue)) {
-                currentTrialIndex++;
-                currentTrialValue = trialList.get(currentTrialIndex);
-            }
+        while (cell < size * size) {
+            cellCoord[0] = cell / size;
+            cellCoord[1] = cell % size;
             
-            // Set the value of the cell to the valid number found
-            this.set(currentTrialValue, currentCellCoord[0],
-                    currentCellCoord[1]);
-
-            // Check if the new board has a valid solution,
-            // if not, remove the number added previously and
-            // start the process again with a new random cell.
-            RecursiveSolver rs = new RecursiveSolver(this);
-            if (!rs.solve()) {
-                this.set(0, currentCellCoord[0], currentCellCoord[1]);
-                cellsNotSolution.add(currentCellRank);
-            } else {
-                while (!cellsNotSolution.isEmpty()) {
-                    cells.add(cellsNotSolution.remove());
+            if (!available[cell].isEmpty()) {
+                Collections.shuffle(available[cell]);
+                num = available[cell].remove();
+                if (isNumValid(cellCoord, num)) {
+                    set(num, cellCoord[0], cellCoord[1]);
+                    cell++;
                 }
-                Collections.shuffle(cells);
+            } else {
+                for (int i = 1; i < size + 1; i++) {
+                    available[cell].add(i);
+                }
+                cell--;
+                set(0, cell / size, cell % size);
             }
         }
-
+        
         /*
          * Part II - From this random complete grid, create a board with a
          * unique solution such that it is not possible to remove any more
          * numbers without destroying the uniqueness of the solution.
          */
+        LinkedList<Integer> cells = new LinkedList<Integer>();
         for (int i = 0; i < size * size; i++) {
             cells.add(i);
         }
@@ -90,14 +71,14 @@ public class RandomGenerator extends SudokuBoard {
         int col;
         int temp;
         while (!cells.isEmpty()) {
-            currentCellRank = cells.remove();
-            row = currentCellRank / size;
-            col = currentCellRank % size;
+            cell = cells.remove();
+            row = cell / size;
+            col = cell % size;
             temp = this.get(row, col);
             this.set(0, row, col);
             RecursiveSolver rc = new RecursiveSolver(this);
             if (rc.countSolutions() > 1)
                 this.set(temp, row, col);
-        }
+        }     
     }
 }

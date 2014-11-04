@@ -12,7 +12,13 @@ back to CSV. The user also has the possibility to generate random Sudokus.
 
 ## How to use
 
-First make sure that your input CSV containing the unsolved Sudoku respects the following format:
+First make sure that your input CSV containing the unsolved Sudoku respects the following format:  
+
+> 0,3,5,2,9,0,8...  
+0,8,2,4,1,0,7...  
+7,6,4,3,8,0,0...  
+...
+
 - values must be comma-separated, without quotes, but can have whitespaces between them
 - unassigned values must be 0s
 - the grid must be a 9*9 square grid respecting basic Sudoku rules

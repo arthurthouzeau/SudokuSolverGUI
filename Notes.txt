@@ -22,3 +22,11 @@ another one.
 This method is quite heavy and may be slightly difficult to read.
 I chose not to trust the user input and thus perform several 
 checks to ensure the Sudoku provided is correct.
+
+- The current method generating Sudokus is not 100% reliable.
+Sometimes the generation can get stuck for a long time. As a 
+consequence, if the generation is not finished within 5 seconds
+it is stopped and the user can choose to restart under hopefully
+better conditions. It may be even better for the user if the program
+would automatically kick-off the process again every 5 seconds until 
+the generation is successful.

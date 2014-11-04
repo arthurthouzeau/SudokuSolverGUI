@@ -74,11 +74,11 @@ public class RandomGenerator extends SudokuBoard {
             cell = cells.remove();
             row = cell / size;
             col = cell % size;
-            temp = this.get(row, col);
-            this.set(0, row, col);
+            temp = get(row, col);
+            set(0, row, col);
             RecursiveSolver rc = new RecursiveSolver(this);
             if (rc.countSolutions() > 1)
-                this.set(temp, row, col);
+                set(temp, row, col);
         }     
     }
 }

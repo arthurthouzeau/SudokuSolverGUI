@@ -30,4 +30,4 @@ See the Javadoc.
 ## Notes
 
 This program uses the OpenCSV library for reading and writing CSV files.  
-Please the "Notes" document for some explanations on the choices of implementations.
+Please the "Notes" document for some explanations on the choices of implementation.

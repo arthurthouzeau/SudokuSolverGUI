@@ -1,0 +1,24 @@
+Choices and trade-offs
+
+- Use of the OpenCSV library for reading and writing CSV files: 
+Writing a custom CSV parser may sound easy but I think there is 
+a good chance it will be faulty. I preferred to use a small and 
+correctly working out-of-the box CSV reader and writer.
+
+- Representation of the Sudoku as a two-dimensional int array:
+I could reasonably have used a two-dimensional byte array 
+instead, in order to use less memory (4 times less). The limit 
+on the size of Sudoku would have been 121*121, which is largely 
+enough for a regular use. However if someone feels like creating 
+a 400*400 Sudoku and solving it with this program it is possible!
+
+- If I was to implement a second algorithm to solve the Sudoku,
+I would create an interface SudokuSolver with a method solve(). 
+The current Recursive Backtracking algorithm would be one 
+implementation of this interface, and the second algo would be 
+another one.
+
+- Number of checks in the method loading the CSV (loadFromCSV):
+This method is quite heavy and may be slightly difficult to read.
+I chose not to trust the user input and thus perform several 
+checks to ensure the Sudoku provided is correct.

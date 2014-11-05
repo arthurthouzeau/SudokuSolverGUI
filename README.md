@@ -38,3 +38,6 @@ See the Javadoc.
 This program uses the OpenCSV library for reading and writing CSV files.  
 Please the "Notes" document for some explanations on the choices of implementation.
 
+## Screenshot
+
+![SudokuSolver screenshot](/img/screenshot.png)

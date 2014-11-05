@@ -16,9 +16,9 @@ public class RecursiveSolver {
      * @param sb the Sudoku to solve
      */
     public RecursiveSolver(SudokuBoard board) {
-        sb = new SudokuBoard(board.size);
-        for (int i = 0; i < sb.size; i++) {
-            for (int j = 0; j < sb.size; j++) {
+        sb = new SudokuBoard(board.SIZE);
+        for (int i = 0; i < sb.SIZE; i++) {
+            for (int j = 0; j < sb.SIZE; j++) {
                 sb.set(board.get(i, j), i, j);
             }
         }
@@ -43,16 +43,16 @@ public class RecursiveSolver {
         int[][] emptyCells;
         int k = 0;
 
-        for (int i = 0; i < sb.size; i++) {
-            for (int j = 0; j < sb.size; j++) {
+        for (int i = 0; i < sb.SIZE; i++) {
+            for (int j = 0; j < sb.SIZE; j++) {
                 if (sb.get(i, j) == 0)
                     nbEmpty++;
             }
         }
         emptyCells = new int[nbEmpty][2];
 
-        for (int i = 0; i < sb.size; i++) {
-            for (int j = 0; j < sb.size; j++) {
+        for (int i = 0; i < sb.SIZE; i++) {
+            for (int j = 0; j < sb.SIZE; j++) {
                 if (sb.get(i, j) == 0) {
                     emptyCells[k][0] = i;
                     emptyCells[k][1] = j;
@@ -92,7 +92,7 @@ public class RecursiveSolver {
         if (ind == emptyCells.length)
             return true;
 
-        for (int num = 1; num <= sb.size; num++) {
+        for (int num = 1; num <= sb.SIZE; num++) {
             if (sb.isNumValid(emptyCells[ind], num)) {
 
                 // If "num" doesn't break any rule, insert it in the board and
@@ -143,7 +143,7 @@ public class RecursiveSolver {
         if (ind == emptyCells.length)
             return 1;
 
-        for (int num = 1; num <= sb.size; num++) {
+        for (int num = 1; num <= sb.SIZE; num++) {
             if (sb.isNumValid(emptyCells[ind], num)) {
 
                 // If "trial" doesn't break any rule, insert it in the board and

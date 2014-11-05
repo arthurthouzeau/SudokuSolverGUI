@@ -22,17 +22,20 @@ import model.SudokuBoard;
  */
 @SuppressWarnings("serial")
 public class SudokuPanel extends JPanel {
-    final int SIZE = 9;
-    final int SQRTSIZE = 3;
-    private static Font font = new Font("Arial", Font.PLAIN, 20);
-    private Color solvedCellsColor = new Color(129, 239, 97);
-    private JLabel[][] labels = new JLabel[SIZE][SIZE];
+    private final int SIZE;
+    private final int SQRTSIZE;
+    private final Font CELL_FONT = new Font("Arial", Font.PLAIN, 20);
+    private final Color SOLVED_COLOR = new Color(129, 239, 97);
+    private JLabel[][] cells;
 
     /**
      * Initializes a new SudokuPanel. It adds all the JLabels and sets up the
      * borders.
      */
-    public SudokuPanel() {
+    public SudokuPanel(int size) {
+        this.SIZE = size;
+        this.SQRTSIZE = (int) Math.sqrt(SIZE);
+        cells = new JLabel[SIZE][SIZE];
         initLabels();
         setLayout(new GridLayout(SQRTSIZE, SQRTSIZE));
         for (int k = 0; k < SIZE; k++) {
@@ -42,7 +45,7 @@ public class SudokuPanel extends JPanel {
             int boxCol = (k % SQRTSIZE) * SQRTSIZE;
             for (int i = 0; i < SQRTSIZE; i++) {
                 for (int j = 0; j < SQRTSIZE; j++) {
-                    box.add(labels[boxRow + i][boxCol + j]);
+                    box.add(cells[boxRow + i][boxCol + j]);
                 }
             }
             add(box);
@@ -55,12 +58,12 @@ public class SudokuPanel extends JPanel {
     private void initLabels() {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
-                labels[i][j] = new JLabel();
-                labels[i][j].setHorizontalAlignment(SwingConstants.CENTER);
-                labels[i][j].setOpaque(true);
-                labels[i][j].setBackground(Color.WHITE);
-                labels[i][j].setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                labels[i][j].setFont(font);
+                cells[i][j] = new JLabel();
+                cells[i][j].setHorizontalAlignment(SwingConstants.CENTER);
+                cells[i][j].setOpaque(true);
+                cells[i][j].setBackground(Color.WHITE);
+                cells[i][j].setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                cells[i][j].setFont(CELL_FONT);
             }
         }
     }
@@ -71,19 +74,19 @@ public class SudokuPanel extends JPanel {
      * 
      * @param sb the new Sudoku to solve
      */
-    public void updateLabelsNew(SudokuBoard sb) {
+    public void updateCellsNew(SudokuBoard sb) {
         int value;
-        JLabel l;
+        JLabel cell;
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 value = sb.get(i, j);
-                l = labels[i][j];
+                cell = cells[i][j];
                 if (value == 0) {
-                    l.setText("");
-                    l.setBackground(Color.LIGHT_GRAY);
+                    cell.setText("");
+                    cell.setBackground(Color.LIGHT_GRAY);
                 } else {
-                    l.setText(String.valueOf(value));
-                    l.setBackground(Color.WHITE);
+                    cell.setText(String.valueOf(value));
+                    cell.setBackground(Color.WHITE);
                 }
             }
         }
@@ -94,14 +97,14 @@ public class SudokuPanel extends JPanel {
      * 
      * @param sb the Sudoku results
      */
-    public void updateLabelsResults(SudokuBoard sb) {
-        JLabel l;
+    public void updateCellsResults(SudokuBoard sb) {
+        JLabel cell;
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
-                l = labels[i][j];
-                if (l.getText().equals(""))
-                    l.setBackground(solvedCellsColor);
-                l.setText(String.valueOf(sb.get(i, j)));
+                cell = cells[i][j];
+                if (cell.getText().equals(""))
+                    cell.setBackground(SOLVED_COLOR);
+                cell.setText(String.valueOf(sb.get(i, j)));
             }
         }
     }
@@ -115,7 +118,7 @@ public class SudokuPanel extends JPanel {
         SudokuBoard sb = new SudokuBoard(SIZE);
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
-                String label = labels[i][j].getText();
+                String label = cells[i][j].getText();
                 int value = label.equals("") ? 0 : Integer.parseInt(label);
                 sb.set(value, i, j);
                 ;

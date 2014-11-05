@@ -31,16 +31,17 @@ import model.SudokuBoard;
  */
 @SuppressWarnings("serial")
 public class SudokuFrame extends JFrame {
-    final JFileChooser fc = new JFileChooser();
-    final FileNameExtensionFilter csvFilter = 
+    private final int SIZE = 9;
+    private FileNameExtensionFilter CSV_FILTER = 
             new FileNameExtensionFilter("CSV only", "csv");
+    private JFileChooser fc = new JFileChooser();
     private JPanel container = new JPanel(new BorderLayout());
     private JPanel controls = new JPanel();
     private JButton importButton = new JButton("Import CSV");
     private JButton generateButton = new JButton("Generate");
     private JButton solveButton = new JButton("Solve !");
     private JButton writeButton = new JButton("Export to CSV");
-    private SudokuPanel grid = new SudokuPanel();
+    private SudokuPanel grid = new SudokuPanel(SIZE);
 
     /**
      * Initializes the main frame. Set up the layout, add the different
@@ -49,7 +50,7 @@ public class SudokuFrame extends JFrame {
     public SudokuFrame() {
         setTitle("Sudoku Solver");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        fc.setFileFilter(csvFilter);
+        fc.setFileFilter(CSV_FILTER);
         
         importButton.addActionListener(new ImportButtonListener());        
         ActionListener generateButtonListener = new GenerateButtonListener();
@@ -85,11 +86,11 @@ public class SudokuFrame extends JFrame {
                     String inputFile = fc.getSelectedFile().getAbsolutePath();
                     SudokuBoard sb = SudokuBoard.importFromCSV(inputFile);
                     // Check the dimension of the Sudoku
-                    if (sb.size != grid.SIZE) {
+                    if (sb.SIZE != SIZE) {
                         String errorMsg = "Please check that the input CSV is a "
-                                + grid.SIZE + "*" + grid.SIZE + " grid.\n"
+                                + SIZE + "*" + SIZE + " grid.\n"
                                 + "This version of the program only accepts "
-                                + grid.SIZE + "*" + grid.SIZE + " Sudokus.";
+                                + SIZE + "*" + SIZE + " Sudokus.";
                         JOptionPane.showMessageDialog(fc, errorMsg, "Error",
                                 JOptionPane.ERROR_MESSAGE);
                         return;
@@ -98,14 +99,14 @@ public class SudokuFrame extends JFrame {
                     if (!sb.checkInitialBoard()) {
                         String errorMsg = "The initial grid seems incorrect.\n"
                                 + "Please check that :\n"
-                                + "- integers are between 0 and "+ sb.size + "\n"
+                                + "- integers are between 0 and "+ sb.SIZE + "\n"
                                 + "- each integer appears only once on each row, column and region.";
                         JOptionPane.showMessageDialog(fc, errorMsg, "Error",
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                     // Update GUI
-                    grid.updateLabelsNew(sb);
+                    grid.updateCellsNew(sb);
                 } catch (ImportException e) {
                     String errorMsg = "An error occured during the import of the CSV file.\n";
                     errorMsg = errorMsg + e.getMessage();
@@ -125,10 +126,10 @@ public class SudokuFrame extends JFrame {
     class GenerateButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent arg0) {
             ExecutorService executor = Executors.newSingleThreadExecutor();
-            Future<SudokuBoard> future = executor.submit(new Task());
+            Future<SudokuBoard> future = executor.submit(new GenerationTask(SIZE));
             try {
                 SudokuBoard sb = future.get(5, TimeUnit.SECONDS);
-                grid.updateLabelsNew(sb);
+                grid.updateCellsNew(sb);
             } catch (TimeoutException e) {
                 String infoMsg = "Oops! Bad random initialization, please try again.";
                 JOptionPane.showMessageDialog(container, infoMsg, "Info",
@@ -160,7 +161,7 @@ public class SudokuFrame extends JFrame {
                         "Result", JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
-            grid.updateLabelsResults(rs.getBoard());
+            grid.updateCellsResults(rs.getBoard());
         }
     }
 

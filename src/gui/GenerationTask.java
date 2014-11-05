@@ -12,8 +12,18 @@ import model.RandomGenerator;
  * @author Arthur Thouzeau
  * @version 1.0
  */
-public class Task implements Callable<SudokuBoard> {
-
+public class GenerationTask implements Callable<SudokuBoard> {
+    private final int size;
+    
+    /**
+     * Initializes the task to generate a SudokuBoard.
+     * 
+     * @param size the size of the Sudokuboard to generate (number of rows)
+     */
+    public GenerationTask (int size) {
+        this.size = size;
+    }
+    
     /**
      * Returns the new randomly generated SudokuBoard
      * 
@@ -21,7 +31,7 @@ public class Task implements Callable<SudokuBoard> {
      */
     @Override
     public SudokuBoard call() throws Exception {
-        RandomGenerator sg = new RandomGenerator();
+        RandomGenerator sg = new RandomGenerator(size);
         return sg;
     }
 }

@@ -19,7 +19,7 @@ import au.com.bytecode.opencsv.CSVWriter;
  * @version 1.0
  */
 public class SudokuBoard {
-    public final int size;
+    public final int SIZE;
     private int[][] board;
 
     /**
@@ -28,8 +28,8 @@ public class SudokuBoard {
      * @param size the number of rows (or columns) of the new SudokuBoard
      */
     public SudokuBoard(int size) {
-        this.size = size;
-        this.board = new int[size][size];
+        SIZE = size;
+        board = new int[size][size];
     }
     
     /**
@@ -62,9 +62,9 @@ public class SudokuBoard {
      *         <code>false</code> otherwise
      */
     private boolean checkInitialRange() {
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                if (board[i][j] < 0 || board[i][j] > size)
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                if (board[i][j] < 0 || board[i][j] > SIZE)
                     return false;
             }
         }
@@ -80,10 +80,10 @@ public class SudokuBoard {
      *         <code>false</code> otherwise
      */
     private boolean checkInitialRows() {
-        BitSet bits = new BitSet(size + 1);
+        BitSet bits = new BitSet(SIZE + 1);
 
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
                 if (board[i][j] != 0 && bits.get(board[i][j]))
                     return false;
                 bits.set(board[i][j]);
@@ -102,10 +102,10 @@ public class SudokuBoard {
      *         <code>false</code> otherwise
      */
     private boolean checkInitialCols() {
-        BitSet bits = new BitSet(size + 1);
+        BitSet bits = new BitSet(SIZE + 1);
 
-        for (int j = 0; j < size; j++) {
-            for (int i = 0; i < size; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            for (int i = 0; i < SIZE; i++) {
                 if (board[i][j] != 0 && bits.get(board[i][j]))
                     return false;
                 bits.set(board[i][j]);
@@ -124,11 +124,11 @@ public class SudokuBoard {
      *         <code>false</code> otherwise
      */
     private boolean checkInitialBoxes() {
-        BitSet bits = new BitSet(size + 1);
-        int sqrtSize = (int) Math.sqrt(size);
+        BitSet bits = new BitSet(SIZE + 1);
+        int sqrtSize = (int) Math.sqrt(SIZE);
 
-        for (int i = 0; i < size; i += sqrtSize) {
-            for (int j = 0; j < size; j += sqrtSize) {
+        for (int i = 0; i < SIZE; i += sqrtSize) {
+            for (int j = 0; j < SIZE; j += sqrtSize) {
                 for (int k = 0; k < sqrtSize; k++) {
                     for (int l = 0; l < sqrtSize; l++) {
                         if (board[i + k][j + l] != 0
@@ -166,12 +166,12 @@ public class SudokuBoard {
      *         <code>false</code> otherwise
      */
     public boolean isNumValid(int[] cell, int num) {
-        int sqrtSize = (int) Math.sqrt(size);
+        int sqrtSize = (int) Math.sqrt(SIZE);
         int boxRow = (cell[0] / sqrtSize) * sqrtSize;
         int boxCol = (cell[1] / sqrtSize) * sqrtSize;
 
         // Check row, column and box rules
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < SIZE; i++) {
             if (get(cell[0], i) == num
                     || get(i, cell[1]) == num
                     || get(boxRow + (i % sqrtSize), boxCol + (i / sqrtSize)) == num)
@@ -214,8 +214,8 @@ public class SudokuBoard {
             // Initialize SudokuBoard and read CSV line by line to populate it
             SudokuBoard sb = new SudokuBoard(nextLine.length);
             do {
-                if (nextLine.length != sb.size) {
-                    throw new ImportException("Please check each row has " + sb.size
+                if (nextLine.length != sb.SIZE) {
+                    throw new ImportException("Please check each row has " + sb.SIZE
                             + " columns. (Same as first row)");
                 }
                 for (int j = 0; j < nextLine.length; j++) {
@@ -225,12 +225,12 @@ public class SudokuBoard {
                 }
                 countLines++;
             } while ((nextLine = reader.readNext()) != null
-                    && countLines < sb.size);
+                    && countLines < sb.SIZE);
 
             // Check there are as many rows as columns
-            if (countLines < sb.size || nextLine != null) {
+            if (countLines < sb.SIZE || nextLine != null) {
                 throw new ImportException("Please check the input CSV file has "
-                        + sb.size + " rows. (To match the number of columns)");
+                        + sb.SIZE + " rows. (To match the number of columns)");
             }
             return sb;
         } catch (FileNotFoundException e) {
@@ -252,10 +252,10 @@ public class SudokuBoard {
      *                     FileNotFoundException)
      */
     public void writeToCSV(String outputFile) throws IOException {
-        String[][] output = new String[size][size];
+        String[][] output = new String[SIZE][SIZE];
 
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
                 output[i][j] = String.valueOf(get(i, j));
             }
         }

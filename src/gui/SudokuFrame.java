@@ -38,7 +38,7 @@ public class SudokuFrame extends JFrame {
     private JPanel controls = new JPanel();
     private JButton importButton = new JButton("Import CSV");
     private JButton generateButton = new JButton("Generate");
-    private JButton solveButton = new JButton("Solve it!");
+    private JButton solveButton = new JButton("Solve !");
     private JButton writeButton = new JButton("Export to CSV");
     private SudokuPanel grid = new SudokuPanel();
 

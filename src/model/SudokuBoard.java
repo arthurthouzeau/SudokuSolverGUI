@@ -11,7 +11,7 @@ import au.com.bytecode.opencsv.CSVWriter;
 
 /**
  * This class represents a Sudoku board as a two-dimensional
- * <code>int<code> array. It provides methods to load a Sudoku 
+ * <code>int</code> array. It provides methods to load a Sudoku 
  * from a CSV file, write a Sudoku to a CSV file, and check the 
  * correctness of an initial grid.
  * 

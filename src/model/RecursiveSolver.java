@@ -13,7 +13,7 @@ public class RecursiveSolver {
     /**
      * Initializes a new Recursive Solver.
      * 
-     * @param sb the Sudoku to solve
+     * @param board the Sudoku to solve
      */
     public RecursiveSolver(SudokuBoard board) {
         sb = new SudokuBoard(board.SIZE);

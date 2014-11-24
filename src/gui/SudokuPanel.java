@@ -121,7 +121,6 @@ public class SudokuPanel extends JPanel {
                 String label = cells[i][j].getText();
                 int value = label.equals("") ? 0 : Integer.parseInt(label);
                 sb.set(value, i, j);
-                ;
             }
         }
         return sb;

@@ -144,23 +144,21 @@ public class RecursiveSolver {
             return 1;
 
         for (int num = 1; num <= sb.SIZE; num++) {
+            
+            // Check if we have already found 2 solutions
+            if (count > 1 || (flag && count == 1))
+                return count;
+            
             if (sb.isNumValid(emptyCells[ind], num)) {
 
                 // If "trial" doesn't break any rule, insert it in the board and
                 // move to the next unassigned cell.
                 sb.set(num, emptyCells[ind][0], emptyCells[ind][1]);
-
-                if (count > 1)
-                    return count;
-                if (flag) {
-                    if (count == 1)
-                        return 1;
-                    count += countSolutionsBacktrack(emptyCells, ind + 1, flag);
+                
+                if (count == 1) { // just found first solution, turn flag on
+                    count += countSolutionsBacktrack(emptyCells, ind + 1,true);
                 } else {
-                    if (count == 1)
-                        count += countSolutionsBacktrack(emptyCells, ind + 1,true);
-                    else
-                        count += countSolutionsBacktrack(emptyCells, ind + 1,flag);
+                    count += countSolutionsBacktrack(emptyCells, ind + 1, flag);
                 }
 
                 sb.set(0, emptyCells[ind][0], emptyCells[ind][1]);
